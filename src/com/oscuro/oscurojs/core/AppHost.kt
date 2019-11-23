@@ -23,7 +23,6 @@
  */
 package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.BrowserWindow
 import com.oscuro.oscurojs.client.Producer
 import com.oscuro.oscurojs.core.events.CoreEvent
 import com.oscuro.oscurojs.core.events.EventDispatcher

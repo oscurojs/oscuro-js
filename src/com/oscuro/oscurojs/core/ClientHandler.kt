@@ -23,7 +23,7 @@
  */
 package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.BrowserWindow
+import com.oscuro.oscurojs.node.BrowserWindow
 import com.oscuro.oscurojs.node.Socket
 
 /**
@@ -46,12 +46,12 @@ class ClientHandler(host: AppHost) {
      */
     private fun addClient(client: Socket) {
         clients.add(client)
-//        client.on("data") { chunk ->
-//            println("msg = $chunk")
-//            val win = BrowserWindow()
-//            win.loadURL("https://kotlinlang.org/docs/reference/object-declarations.html")
-//            win.show()
-//        }
+        client.on("data") { chunk: String ->
+            println("msgo = $chunk")
+            val win = BrowserWindow()
+            win.loadURL("https://kotlinlang.org/docs/reference/object-declarations.html", object {})
+            win.show()
+        }
     }
 
     /**

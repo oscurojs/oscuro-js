@@ -28,4 +28,9 @@ package com.argochamber.oscurojs
  * From ElectronJS
  */
 external val electron: dynamic = definedExternally
-private val _topLevelPlaceholderHolder = js("var electron = require('electron');")
+private val _topLevelPlaceholderHolder = js("""
+    var electron = require('electron');
+    var BrowserWindow = electron.BrowserWindow;
+    var Menu = electron.Menu;
+    var MenuItem = electron.MenuItem;
+""")

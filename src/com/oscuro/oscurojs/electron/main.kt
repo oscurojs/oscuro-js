@@ -34,7 +34,5 @@ import com.oscuro.oscurojs.core.events.EventDispatcher
 fun main() {
     val host = AppHost(EventDispatcher())
     ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
-    }
+    electron.app.on("ready", host::ready)
 }
