@@ -21,20 +21,27 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
+import com.argochamber.oscurojs.BrowserWindow
+import com.oscuro.oscurojs.client.Producer
+import com.oscuro.oscurojs.core.events.CoreEvent
 import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.oscuro.oscurojs.core.events.Subscribable
+import com.oscuro.oscurojs.node.ServerBuilder
 
 /**
- * Main entry point.
+ * Contains the main application routing, client connection handling and message passing nexus.
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
+class AppHost(private val coreEvents: EventDispatcher<CoreEvent, Unit>) : Subscribable<CoreEvent, Unit> by coreEvents {
+    /**
+     * Called when the host is ready to serve windows.
+     */
+    fun ready() {
+        ServerBuilder.createServer { client ->
+            coreEvents.dispatch(CoreEvent(client, HostEvent.CLIENT_CONNECTED))
+        }
+        println("Server created, producing data...")
+        Producer.test()
     }
 }

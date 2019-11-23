@@ -23,21 +23,10 @@
  */
 package com.oscuro.oscurojs.core.events
 
-class InterceptorContainer<T> {
-    fun add(interceptor: (event: T, next: (event: T) -> Unit) -> Unit) {
-        interceptors.add(interceptor)
-    }
-
-    private fun propagate(event: T, depth: Int): Boolean {
-        if (interceptors.size <= depth) return false
-        val interceptor = interceptors[depth]
-        interceptor(event) { propagate(it, depth + 1) }
-        return true
-    }
-
-    fun dispatch(event: T) {
-        propagate(event, 0)
-    }
-
-    private val interceptors: ArrayList<(event: T, next: (event: T) -> Unit) -> Unit> = arrayListOf()
+/**
+ * Can subscribe listeners to.
+ */
+interface Subscribable<T, U> {
+    fun add(listener: (event: T) -> U)
+    fun remove(listener: (event: T) -> U)
 }

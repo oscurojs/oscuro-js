@@ -21,20 +21,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs.core.events
 
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
-import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.oscuro.oscurojs.node.Socket
 
-/**
- * Main entry point.
- */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
-    }
+class CoreEvent(val client: Socket, val target: Any?) {
 }

@@ -21,20 +21,23 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
-
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
-import com.oscuro.oscurojs.core.events.EventDispatcher
+package com.oscuro.oscurojs.node
 
 /**
- * Main entry point.
+ * The server builder configures the net module socket server and returns
+ * the original socket server at the end (As dynamic).
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
+object ServerBuilder {
+
+    val SOCKET_PATH = "\\\\.\\pipe\\oscurojs-ipc";
+
+    /**
+     * Builds the server and listens to the preconfigured pipe.
+     */
+    fun createServer(connectionListener: (socket: Socket) -> Unit) {
+        val options = object {}
+        val server = net.createServer(options) { socket -> connectionListener(socket) }
+        server.listen(SOCKET_PATH)
+        return server
     }
 }

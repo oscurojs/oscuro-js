@@ -21,20 +21,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
-
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
-import com.oscuro.oscurojs.core.events.EventDispatcher
+package com.oscuro.oscurojs.node
 
 /**
- * Main entry point.
+ * Network module import.
+ * From NodeJS
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
-    }
-}
+external val net: dynamic = definedExternally
+private val _topLevelPlaceholderHolder = js("var net = require('net');")

@@ -21,20 +21,18 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs.client
 
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
-import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.oscuro.oscurojs.node.ServerBuilder
+import com.oscuro.oscurojs.node.net
 
 /**
- * Main entry point.
+ * This driver is used to produce messages on the host.
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
+object Producer {
+    fun test(): Unit {
+        val socket = net.createConnection(ServerBuilder.SOCKET_PATH)
+        socket.write("MKWIN 000000\n")
+        socket.end();
     }
 }

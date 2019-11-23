@@ -21,20 +21,20 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
 import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.oscuro.oscurojs.core.events.Subscribable
+import com.oscuro.oscurojs.node.Socket
+import com.oscuro.oscurojs.node.readline
 
 /**
- * Main entry point.
+ * This message parser parses a custom protocol, emitting a message handler when the message is intercepted.
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
+class MessageParser(private val messages: EventDispatcher<Message, Unit>): Subscribable<Message, Unit> by messages {
+    companion object {
+        fun create(socket: Socket) = MessageParser(EventDispatcher())
     }
+
+    private val reader = readline.createInterface()
 }

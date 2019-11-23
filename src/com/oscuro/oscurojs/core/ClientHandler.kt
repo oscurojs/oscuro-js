@@ -21,20 +21,43 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.electron
-import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
-import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.argochamber.oscurojs.BrowserWindow
+import com.oscuro.oscurojs.node.Socket
 
 /**
- * Main entry point.
+ * Handles the client's connection.
  */
-fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
-    electron.app.on("ready") {
-      host.ready()
+class ClientHandler(host: AppHost) {
+    init {
+        host.add { event ->
+            when (event.target) {
+                HostEvent.CLIENT_CONNECTED -> addClient(event.client)
+                HostEvent.CLIENT_DISCONNECTED -> removeClient(event.client)
+            }
+        }
+    }
+
+    private val clients: MutableSet<Socket> = mutableSetOf()
+
+    /**
+     * Called when client connections occur.
+     */
+    private fun addClient(client: Socket) {
+        clients.add(client)
+//        client.on("data") { chunk ->
+//            println("msg = $chunk")
+//            val win = BrowserWindow()
+//            win.loadURL("https://kotlinlang.org/docs/reference/object-declarations.html")
+//            win.show()
+//        }
+    }
+
+    /**
+     * Called when the client disconnects, for client cleanup.
+     */
+    private fun removeClient(client: Socket) {
+        clients.remove(client)
     }
 }
