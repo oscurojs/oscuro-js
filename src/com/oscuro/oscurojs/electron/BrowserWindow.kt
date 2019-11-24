@@ -30,7 +30,7 @@
    * @see https://github.com/electron/electron/blob/v1.4.1/docs/api/browser-window.md
    * @date 2019-11-23
    */
-  external class BrowserWindow {
+  external class BrowserWindow(vararg args: Any) {
     companion object {
   
     /**

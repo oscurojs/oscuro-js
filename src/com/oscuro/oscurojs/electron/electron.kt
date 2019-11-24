@@ -23,14 +23,27 @@
  */
 package com.argochamber.oscurojs
 
+import com.oscuro.oscurojs.node.BrowserWindow
+
 /**
  * Electron module import.
  * From ElectronJS
  */
 external val electron: dynamic = definedExternally
+external fun createBrowserWindow(script: String): BrowserWindow
+external fun createBrowserWindow(): BrowserWindow
 private val _topLevelPlaceholderHolder = js("""
     var electron = require('electron');
     var BrowserWindow = electron.BrowserWindow;
     var Menu = electron.Menu;
     var MenuItem = electron.MenuItem;
+    var path = require('path');
+    function createBrowserWindow(script) {
+      return new BrowserWindow({
+        webPreferences: {
+          preload: path.join(__dirname, script || "../../../oscuro-web.js"),
+          nodeIntegration: false
+        }
+      })
+    }
 """)

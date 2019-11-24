@@ -20,32 +20,18 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
- */
-package com.oscuro.oscurojs.client
-
-import com.oscuro.oscurojs.core.async
-import com.oscuro.oscurojs.core.await
-import com.oscuro.oscurojs.core.messaging.Message
-import com.oscuro.oscurojs.core.messaging.Parser
-import com.oscuro.oscurojs.node.ServerBuilder
-import com.oscuro.oscurojs.node.net
+*/
+const { ipcRenderer: ipc, remote } = require('electron');
 
 /**
- * This driver is used to produce messages on the host.
+ * This is the preload script, will inject basic interaction elements into the
+ * web client, in order to communicate with the host process.
  */
-object Producer {
-    fun test() {
-        val socket = net.createConnection(ServerBuilder.SOCKET_PATH)
-        Parser(socket).add {
-            async {
-                val msg = it.readAsync().await()
-                println(msg)
-            }
-        }
-        Message.create("MKWIN",
-            "Width" to "800",
-            "Height" to "600",
-            "File" to "../../../sample-view.html"
-        ).sendTo(socket)
-    }
-}
+process.once('loaded', () => {
+  global.Oscuro = {
+    yes: 'sure',
+    directory: __dirname,
+    filename: __filename
+  };
+});
+

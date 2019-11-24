@@ -23,6 +23,7 @@
  */
 package com.oscuro.oscurojs.core
 
+import com.argochamber.oscurojs.createBrowserWindow
 import com.oscuro.oscurojs.core.commands.CommandRouter
 import com.oscuro.oscurojs.core.messaging.InboundMessage
 import com.oscuro.oscurojs.core.messaging.Message
@@ -50,7 +51,7 @@ class ClientApplication(val client: Socket) {
 
     suspend fun makeWindow(msg: InboundMessage) = msg.readAsync().await().let {
         println("Making window")
-        val win: dynamic = BrowserWindow()
+        val win: dynamic = createBrowserWindow()
         val width = it["Width"]?.toInt() ?: 0
         val height = it["Height"]?.toInt() ?: 0
         win.setSize(width, height, false)

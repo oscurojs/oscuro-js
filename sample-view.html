@@ -1,3 +1,26 @@
+<!--
+  MIT License
+
+  Copyright (c) 2019 Pablo Blanco Celdrán
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,17 +42,45 @@
       justify-content: center;
       align-items: center;
       color: black;
-      background: linear-gradient(grey, slategrey);
+      background: black;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     h1 {
-      text-shadow: 0 0 32px blueviolet;
+      text-shadow: 1px 1px 0 white;
+      font-size: 8em;
+    }
+
+    #logo {
+      position: fixed;
+      z-index: -1;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        top: 10%;
+      }
+
+      50% {
+        top: calc(10% + 16px);
+      }
+
+      100% {
+        top: 10%;
+      }
     }
   </style>
 </head>
 
 <body>
-  <h1>Oscuro JS</h1>
+  <h1>Oscuro</h1>
+  <img id="logo" />
+  <script>
+    const logo = document.getElementById("logo")
+    logo.setAttribute("src", `${Oscuro.directory}/oscurojs-logo.svg`)
+    console.log(Oscuro)
+  </script>
 </body>
 
 </html>
