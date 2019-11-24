@@ -23,6 +23,9 @@
  */
 package com.oscuro.oscurojs.client
 
+import com.oscuro.oscurojs.core.async
+import com.oscuro.oscurojs.core.await
+import com.oscuro.oscurojs.core.messaging.Parser
 import com.oscuro.oscurojs.node.ServerBuilder
 import com.oscuro.oscurojs.node.net
 
@@ -32,7 +35,17 @@ import com.oscuro.oscurojs.node.net
 object Producer {
     fun test(): Unit {
         val socket = net.createConnection(ServerBuilder.SOCKET_PATH)
-        socket.write("MKWIN 000000\n")
-        socket.end();
+        Parser(socket).add {
+            async {
+                val msg = it.readAsync().await()
+                println(msg)
+            }
+        }
+        socket.write("""
+                TRANSACTION 1.0 3 MKWIN
+                Width:800
+                Height:600
+                File:../../../sample-view.html
+            """.trimIndent() + "\n")
     }
 }

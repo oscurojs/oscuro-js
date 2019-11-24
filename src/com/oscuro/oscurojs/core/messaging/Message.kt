@@ -21,8 +21,35 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.core.events
+package com.oscuro.oscurojs.core.messaging
 
 import com.oscuro.oscurojs.node.Socket
 
-class CoreEvent(val client: Socket, val target: Any?)
+/**
+ * A message is an in-memory message data, stored as a map of key-values plus some additional
+ * protocol data.
+ */
+data class Message(val command: String, val version: String, val fields: Map<String, String>) {
+    companion object {
+        val CURRENT_VERSION = "1.0"
+
+        /**
+         * Creates a new message.
+         */
+        fun create(command: String, vararg fields: Pair<String, String>) =
+                Message(command, CURRENT_VERSION, mapOf(*fields))
+    }
+
+    /**
+     * Get a field value.
+     */
+    operator fun get(key: String) = fields[key]
+
+    /**
+     * Serializes the message to the given socket.
+     */
+    fun sendTo(socket: Socket) {
+        val writer = OutboundMessage(socket, command, version, fields.size).start()
+        for ((key, value) in fields) writer.write(key, value)
+    }
+}

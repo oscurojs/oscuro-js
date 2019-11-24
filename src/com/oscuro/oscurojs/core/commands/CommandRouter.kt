@@ -21,20 +21,39 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.core
+package com.oscuro.oscurojs.core.commands
 
-import com.oscuro.oscurojs.core.events.EventDispatcher
-import com.oscuro.oscurojs.core.events.Subscribable
-import com.oscuro.oscurojs.node.Socket
-import com.oscuro.oscurojs.node.readline
+import com.oscuro.oscurojs.core.messaging.InboundMessage
 
 /**
- * This message parser parses a custom protocol, emitting a message handler when the message is intercepted.
+ * Asynchronous command routing.
  */
-class MessageParser(private val messages: EventDispatcher<Message, Unit>): Subscribable<Message, Unit> by messages {
+class CommandRouter {
     companion object {
-        fun create(socket: Socket) = MessageParser(EventDispatcher())
+        /**
+         * Makes a new command router with predefined routes.
+         */
+        fun of(vararg pairs: Pair<String, suspend (msg: InboundMessage) -> Unit>) = CommandRouter().also {
+            for ((key, value) in pairs) it.add(key, value)
+        }
     }
 
-    private val reader = readline.createInterface()
+    /**
+     * Dispatch a command order.
+     */
+    suspend fun dispatch(msg: InboundMessage) = routes[msg.command]?.let { it.map { it(msg) } }
+
+    /**
+     * Adds a listener to a command-bound incoming message.
+     */
+    fun add(command: String, fn: suspend (msg: InboundMessage) -> Unit) {
+        val handlers = routes[command]
+        if (handlers === null) {
+            routes[command] = mutableSetOf(fn)
+        } else {
+            handlers.add(fn)
+        }
+    }
+
+    private val routes: MutableMap<String, MutableSet<suspend (msg: InboundMessage) -> Unit>> = mutableMapOf()
 }

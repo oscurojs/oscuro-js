@@ -21,8 +21,19 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.core.events
+package com.oscuro.oscurojs.core.messaging
 
 import com.oscuro.oscurojs.node.Socket
 
-class CoreEvent(val client: Socket, val target: Any?)
+/**
+ * Sends fields to the client.
+ */
+class FieldSender(private val client: Socket) {
+    /**
+     * Sends a field, using the oscuro protocol format.
+     */
+    fun write(key: String, value: Any): FieldSender {
+        client.write("$key:$value\n")
+        return this
+    }
+}

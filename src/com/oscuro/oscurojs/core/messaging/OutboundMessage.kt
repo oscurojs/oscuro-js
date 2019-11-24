@@ -21,8 +21,20 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.core.events
+package com.oscuro.oscurojs.core.messaging
 
 import com.oscuro.oscurojs.node.Socket
 
-class CoreEvent(val client: Socket, val target: Any?)
+/**
+ * Write-to counterpart of the read-to inbound message.
+ * Use this to asynchronous write of fields (Eg: A streaming content or large payload that should be chunked).
+ */
+class OutboundMessage(private val client: Socket, val command: String, val version: String, val fieldCount: Int) {
+    /**
+     * Writes the header of the message and starts the field sending.
+     */
+    fun start(): FieldSender {
+        client.write("TRANSACTION $version $fieldCount $command\n")
+        return FieldSender(client)
+    }
+}

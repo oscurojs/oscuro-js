@@ -21,31 +21,35 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.core
+package com.oscuro.oscurojs.core.messaging
 
-import com.oscuro.oscurojs.client.Producer
-import com.oscuro.oscurojs.node.ServerBuilder
+import com.oscuro.oscurojs.core.events.EventDispatcher
+import com.oscuro.oscurojs.core.events.Subscribable
 import com.oscuro.oscurojs.node.Socket
+import com.oscuro.oscurojs.node.readline
 
 /**
- * Contains the main application routing, client connection handling and message passing nexus.
+ * This message parser parses a custom protocol, emitting a message handler when the message is intercepted.
  */
-class AppHost {
-
-    private val clients: MutableMap<Socket, ClientApplication> = mutableMapOf()
-
-    /**
-     * Called when the host is ready to serve windows.
-     */
-    fun ready() {
-        ServerBuilder.createServer { client ->
-            clients[client] = ClientApplication(client)
-            client.on("close") { hadError: Boolean ->
-                clients.remove(client)
-                Unit
-            }
-        }
-        println("Server created, producing data...")
-        Producer.test()
+class Parser(input: Socket): Subscribable<InboundMessage, Unit> {
+    private val reader = readline.createInterface(input)
+    init {
+        reader.on("line", ::handleMessage)
     }
+
+    private fun handleMessage(line: String) {
+        val parts = line.split(" ")
+        if (parts.size != 4) return
+        val (transact, version, argc, command) = parts
+        if (transact != "TRANSACTION") return
+        if (version != "1.0") throw Error("Unsupported protocol version $version")
+        val count = argc.toInt()
+        events.dispatch(InboundMessage(reader, count, command, version))
+    }
+
+    private val events = EventDispatcher<InboundMessage, Unit>()
+
+    override fun add(listener: (event: InboundMessage) -> Unit) = events.add(listener)
+
+    override fun remove(listener: (event: InboundMessage) -> Unit) = events.remove(listener)
 }

@@ -25,14 +25,13 @@ package com.oscuro.oscurojs.electron
 
 import com.argochamber.oscurojs.electron
 import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientHandler
+import com.oscuro.oscurojs.core.ClientApplication
 import com.oscuro.oscurojs.core.events.EventDispatcher
 
 /**
  * Main entry point.
  */
 fun main() {
-    val host = AppHost(EventDispatcher())
-    ClientHandler(host)
+    val host = AppHost()
     electron.app.on("ready", host::ready)
 }

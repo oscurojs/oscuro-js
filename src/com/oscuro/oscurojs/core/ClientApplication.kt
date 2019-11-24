@@ -23,41 +23,46 @@
  */
 package com.oscuro.oscurojs.core
 
+import com.oscuro.oscurojs.core.commands.CommandRouter
+import com.oscuro.oscurojs.core.messaging.InboundMessage
+import com.oscuro.oscurojs.core.messaging.Message
+import com.oscuro.oscurojs.core.messaging.Parser
 import com.oscuro.oscurojs.node.BrowserWindow
 import com.oscuro.oscurojs.node.Socket
 
 /**
  * Handles the client's connection.
  */
-class ClientHandler(host: AppHost) {
+class ClientApplication(val client: Socket) {
+    private val windows: MutableMap<String, BrowserWindow> = mutableMapOf()
+    private val parser = Parser(client)
+    private val router = CommandRouter.of(
+            "MKWIN" to ::makeWindow
+    )
     init {
-        host.add { event ->
-            when (event.target) {
-                HostEvent.CLIENT_CONNECTED -> addClient(event.client)
-                HostEvent.CLIENT_DISCONNECTED -> removeClient(event.client)
+        parser.add {
+            async {
+                router.dispatch(it)
             }
         }
+
     }
 
-    private val clients: MutableSet<Socket> = mutableSetOf()
-
-    /**
-     * Called when client connections occur.
-     */
-    private fun addClient(client: Socket) {
-        clients.add(client)
-        client.on("data") { chunk: String ->
-            println("msgo = $chunk")
-            val win = BrowserWindow()
-            win.loadURL("https://kotlinlang.org/docs/reference/object-declarations.html", object {})
+    suspend fun makeWindow(msg: InboundMessage) = msg.readAsync().await().let {
+        println("Making window")
+        val win: dynamic = BrowserWindow()
+        val width = it["Width"]?.toInt() ?: 0
+        val height = it["Height"]?.toInt() ?: 0
+        win.setSize(width, height, false)
+        win.loadFile(it["File"] ?: "")
+        win.webContents.on("did-finish-load") {
             win.show()
         }
-    }
-
-    /**
-     * Called when the client disconnects, for client cleanup.
-     */
-    private fun removeClient(client: Socket) {
-        clients.remove(client)
+        windows[win.id] = win
+        Message.create("OK",
+            "Command" to "MKWIN",
+            "Id" to win.id
+        ).sendTo(client)
+        Unit
     }
 }
