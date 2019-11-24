@@ -23,12 +23,12 @@
  */
 package com.oscuro.oscurojs.core
 
-import com.argochamber.oscurojs.createBrowserWindow
+import com.oscuro.oscurojs.electron.createBrowserWindow
 import com.oscuro.oscurojs.core.commands.CommandRouter
 import com.oscuro.oscurojs.core.messaging.InboundMessage
 import com.oscuro.oscurojs.core.messaging.Message
 import com.oscuro.oscurojs.core.messaging.Parser
-import com.oscuro.oscurojs.node.BrowserWindow
+import com.oscuro.oscurojs.electron.BrowserWindow
 import com.oscuro.oscurojs.node.Socket
 
 /**

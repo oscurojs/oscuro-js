@@ -21,7 +21,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.node
+package com.oscuro.oscurojs.core
+
+import com.oscuro.oscurojs.node.Socket
+import com.oscuro.oscurojs.node.net
 
 /**
  * The server builder configures the net module socket server and returns

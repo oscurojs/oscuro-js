@@ -21,9 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.argochamber.oscurojs
-
-import com.oscuro.oscurojs.node.BrowserWindow
+package com.oscuro.oscurojs.electron
 
 /**
  * Electron module import.

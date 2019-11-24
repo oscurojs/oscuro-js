@@ -27,7 +27,7 @@ import com.oscuro.oscurojs.core.async
 import com.oscuro.oscurojs.core.await
 import com.oscuro.oscurojs.core.messaging.Message
 import com.oscuro.oscurojs.core.messaging.Parser
-import com.oscuro.oscurojs.node.ServerBuilder
+import com.oscuro.oscurojs.core.ServerBuilder
 import com.oscuro.oscurojs.node.net
 
 /**

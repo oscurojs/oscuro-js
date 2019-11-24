@@ -24,7 +24,6 @@
 package com.oscuro.oscurojs.core
 
 import com.oscuro.oscurojs.client.Producer
-import com.oscuro.oscurojs.node.ServerBuilder
 import com.oscuro.oscurojs.node.Socket
 
 /**

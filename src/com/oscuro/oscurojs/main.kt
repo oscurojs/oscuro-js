@@ -21,12 +21,10 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package com.oscuro.oscurojs.electron
+package com.oscuro.oscurojs
 
-import com.argochamber.oscurojs.electron
+import com.oscuro.oscurojs.electron.electron
 import com.oscuro.oscurojs.core.AppHost
-import com.oscuro.oscurojs.core.ClientApplication
-import com.oscuro.oscurojs.core.events.EventDispatcher
 
 /**
  * Main entry point.

@@ -21,9 +21,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
   */
-  package com.oscuro.oscurojs.node
-  
-  /**
+package com.oscuro.oscurojs.electron
+
+/**
    * Generated from ElectronJS docs
    * @description Create native application menus and context menus.
    * @see http://electron.atom.io/docs/api/menu
